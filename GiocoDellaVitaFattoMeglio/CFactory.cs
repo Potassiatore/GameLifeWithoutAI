@@ -6,23 +6,38 @@ using System.Threading.Tasks;
 
 namespace GiocoDellaVitaFattoMeglio
 {
-    public enum AnimalType
+    public enum Personaggio
     {
         Leone,
         Gazzella,
         Coniglio
     }
+    public enum Oggetto
+    {
+        Carota
+    }
     public class CFactory
     {
-        public CPersonaggio Crea(AnimalType tipo)
+        public static CPersonaggio Crea(Personaggio tipo)
         {
             return tipo switch
             {
-                AnimalType.Leone => new CLeone(),
-                AnimalType.Gazzella => new CGazzella(),
-                AnimalType.Coniglio => new CConiglio(),
+                Personaggio.Leone => new CLeone(),
+                Personaggio.Gazzella => new CGazzella(),
+                Personaggio.Coniglio => new CConiglio(),
+                _ => throw new ArgumentException("Tipo non valido", nameof(tipo))
+            };
+        }
 
-
+    }
+    public class CFactory2
+    {
+        public CCarota Crea(Oggetto tipo)
+        {
+            return tipo switch
+            {
+                Oggetto.Carota => new CCarota(),
+                _ => throw new ArgumentException("Tipo non valido", nameof(tipo))
             };
         }
     }
