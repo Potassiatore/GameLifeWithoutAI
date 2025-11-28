@@ -1,7 +1,10 @@
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
+
 namespace GiocoDellaVitaFattoMeglio
 {
     public partial class Form1 : Form
     {
+        List<CCarota> Carote = new List<CCarota>();
         List<CPersonaggio> Personaggi = new List<CPersonaggio>();
         private PictureBox[,] mappa = new PictureBox[6, 6];
 
@@ -10,29 +13,56 @@ namespace GiocoDellaVitaFattoMeglio
             InitializeComponent();
             InizializzaMappa();
             CreaAnimali();
+            CreaCarote(6);
+        }
+        private void CreaCarote(int quante)
+        {
+            for (int i = 0; i < quante; i++)
+            {
+                CCarota c = new CCarota();
+
+                // trova una cella libera
+                while (mappa[c.Righe, c.Colonne].Image != null)
+                {
+                    c = new CCarota(); // genera una nuova posizione
+                }
+
+                Carote.Add(c);
+                mappa[c.Righe, c.Colonne].Image = c.Immagine;
+            }
         }
 
         private void InizializzaMappa()
         {
-            int cellSize = 80; // più grande = si vedono meglio le immagini
+            int cellSize = 80;
+
+            MappaDiGioco.ColumnCount = 6;
+            MappaDiGioco.RowCount = 6;
+
+            for (int i = 0; i < 6; i++)
+            {
+                MappaDiGioco.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f / 6));
+                MappaDiGioco.RowStyles.Add(new RowStyle(SizeType.Percent, 100f / 6));
+            }
+
             for (int r = 0; r < 6; r++)
             {
                 for (int c = 0; c < 6; c++)
                 {
                     PictureBox pb = new PictureBox
                     {
-                        Width = cellSize,
-                        Height = cellSize,
+                        Dock = DockStyle.Fill,
                         BorderStyle = BorderStyle.FixedSingle,
-                        Location = new Point(c * cellSize + 10, r * cellSize + 10),
                         SizeMode = PictureBoxSizeMode.StretchImage,
-                        BackColor = Color.FromArgb(240, 255, 240) // verdino prato
+                        BackColor = Color.FromArgb(240, 255, 240)
                     };
-                    this.Controls.Add(pb); // oppure MappaDiGioco.Controls.Add(pb) se hai un Panel
+
+                    MappaDiGioco.Controls.Add(pb, c, r);
                     mappa[r, c] = pb;
                 }
             }
         }
+
 
         private void CreaAnimali()
         {
@@ -82,5 +112,9 @@ namespace GiocoDellaVitaFattoMeglio
 
         }
 
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
