@@ -4,97 +4,101 @@ namespace GiocoDellaVitaFattoMeglio
 {
     public partial class Form1 : Form
     {
-        List<CCarota> Carote = new List<CCarota>();
+        List<CMangiabile> Mangiabili = new List<CMangiabile>();
         List<CPersonaggio> Personaggi = new List<CPersonaggio>();
         private PictureBox[,] mappa = new PictureBox[6, 6];
-
+        private static readonly Random rnd = new Random();
+        private int caroteCounter => Mangiabili.Count;
         public Form1()
         {
             InitializeComponent();
-            InizializzaMappa();
-            CreaAnimali();
-            CreaCarote(6);
+            CreaMangiabili(6);
+            CreaGriglia();
         }
-        private void CreaCarote(int quante)
+        private void CreaGriglia()
         {
+            int righe = 6;
+            int colonne = 6;
+            int cellSize = 60;
+            int padding = 2;
+
+            for (int r = 0; r < righe; r++)
+            {
+                for (int c = 0; c < colonne; c++)
+                {
+                    PictureBox pb = new PictureBox();
+                    pb.Width = cellSize;
+                    pb.Height = cellSize;
+
+                    pb.BorderStyle = BorderStyle.FixedSingle;
+                    pb.SizeMode = PictureBoxSizeMode.StretchImage;
+
+                    pb.Location = new Point(
+                        c * (cellSize + padding),
+                        r * (cellSize + padding)
+                    );
+
+                    mappa[r, c] = pb;
+                    MappaDiGioco.Controls.Add(pb);
+                }
+            }
+        }
+
+
+        public void PosizionaLeCose() 
+        {
+            foreach (var personaggio in Personaggi)
+            {
+                if (personaggio.Immagine != null)
+                    mappa[personaggio.Righe, personaggio.Colonne].Image = personaggio.Immagine;
+            }
+
+            foreach (var mangiabile in Mangiabili)
+            {
+                if (mangiabile.Immagine != null)
+                    mappa[mangiabile.Righe, mangiabile.Colonne].Image = mangiabile.Immagine;
+            }
+
+
+        }
+
+        public void GeneraMangiabili()
+        {
+            //Genera mangiabili se sono 0
+        }
+        public int CreaMangiabili(int quante)
+        {
+            if (quante <= 0)
+            {
+                MessageBox.Show("Quantità di carote non valida.");
+                return 0;
+            }
+
             for (int i = 0; i < quante; i++)
             {
-                CCarota c = new CCarota();
+                // creo una nuova carota tramite factory
+                CMangiabile nuova = CFactory2.Crea(Oggetto.Carota);
+                CMangiabile nuova1 = CFactory2.Crea(Oggetto.Fogliame);
 
-                // trova una cella libera
-                while (mappa[c.Righe, c.Colonne].Image != null)
-                {
-                    c = new CCarota(); // genera una nuova posizione
-                }
-
-                Carote.Add(c);
-                mappa[c.Righe, c.Colonne].Image = c.Immagine;
+                // aggiungo alla lista
+                Mangiabili.Add(nuova);
+                Mangiabili.Add(nuova1);
             }
+
+            return quante;
         }
 
-        private void InizializzaMappa()
+        public void CreaGiocatori()
         {
-            int cellSize = 80;
-
-            MappaDiGioco.ColumnCount = 6;
-            MappaDiGioco.RowCount = 6;
-
-            for (int i = 0; i < 6; i++)
-            {
-                MappaDiGioco.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f / 6));
-                MappaDiGioco.RowStyles.Add(new RowStyle(SizeType.Percent, 100f / 6));
-            }
-
-            for (int r = 0; r < 6; r++)
-            {
-                for (int c = 0; c < 6; c++)
-                {
-                    PictureBox pb = new PictureBox
-                    {
-                        Dock = DockStyle.Fill,
-                        BorderStyle = BorderStyle.FixedSingle,
-                        SizeMode = PictureBoxSizeMode.StretchImage,
-                        BackColor = Color.FromArgb(240, 255, 240)
-                    };
-
-                    MappaDiGioco.Controls.Add(pb, c, r);
-                    mappa[r, c] = pb;
-                }
-            }
+            Personaggi.Add(CFactory.Crea(Personaggio.Leone));
+            Personaggi.Add(CFactory.Crea(Personaggio.Leone));
+            Personaggi.Add(CFactory.Crea(Personaggio.Gazzella));
+            Personaggi.Add(CFactory.Crea(Personaggio.Gazzella));
+            Personaggi.Add(CFactory.Crea(Personaggio.Coniglio));
+            Personaggi.Add(CFactory.Crea(Personaggio.Coniglio));
+            Personaggi.Add(CFactory.Crea(Personaggio.Coniglio));
         }
 
-
-        private void CreaAnimali()
-        {
-            // Crea 6 animali in posizioni casuali senza sovrapposizioni
-            var tipi = new[]
-            {
-                Personaggio.Leone,
-                Personaggio.Leone,
-                Personaggio.Gazzella,
-                Personaggio.Gazzella,
-                Personaggio.Coniglio,
-                Personaggio.Coniglio
-            };
-
-            foreach (var tipo in tipi)
-            {
-                CPersonaggio p = CFactory.Crea(tipo);
-
-                int r, c;
-                do
-                {
-                    r = new Random().Next(0, 6);
-                    c = new Random().Next(0, 6);
-                } while (mappa[r, c].Image != null);
-
-                p.Righe = r;
-                p.Colonne = c;
-
-                Personaggi.Add(p);
-                mappa[r, c].Image = p.Immagine; // ECCO LA MAGIA
-            }
-        }
 
 
         private void label1_Click(object sender, EventArgs e)
@@ -115,6 +119,18 @@ namespace GiocoDellaVitaFattoMeglio
         private void Form1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void IniziaGioco_Click(object sender, EventArgs e)
+        {
+            CreaGiocatori();
+            PosizionaLeCose();
+            
+        }
+
+        private void MuoviGioco_Click(object sender, EventArgs e)
+        {
+            
         }
     }
 }

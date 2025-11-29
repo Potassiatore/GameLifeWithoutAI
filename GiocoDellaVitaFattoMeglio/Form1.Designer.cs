@@ -31,6 +31,8 @@
             label1 = new Label();
             MappaDiGioco = new TableLayoutPanel();
             ChatDiAggiornamento = new TableLayoutPanel();
+            IniziaGioco = new Button();
+            MuoviGioco = new Button();
             SuspendLayout();
             // 
             // label1
@@ -88,12 +90,44 @@
             ChatDiAggiornamento.TabIndex = 2;
             ChatDiAggiornamento.Paint += ChatDiAggiornamento_Paint;
             // 
+            // IniziaGioco
+            // 
+            IniziaGioco.BackColor = Color.Peru;
+            IniziaGioco.Cursor = Cursors.Hand;
+            IniziaGioco.FlatStyle = FlatStyle.Flat;
+            IniziaGioco.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
+            IniziaGioco.ImageAlign = ContentAlignment.TopCenter;
+            IniziaGioco.Location = new Point(12, 397);
+            IniziaGioco.Name = "IniziaGioco";
+            IniziaGioco.Size = new Size(127, 50);
+            IniziaGioco.TabIndex = 3;
+            IniziaGioco.Text = "IniziaGioco";
+            IniziaGioco.UseVisualStyleBackColor = false;
+            IniziaGioco.Click += IniziaGioco_Click;
+            // 
+            // MuoviGioco
+            // 
+            MuoviGioco.BackColor = Color.Peru;
+            MuoviGioco.Cursor = Cursors.Hand;
+            MuoviGioco.FlatStyle = FlatStyle.Flat;
+            MuoviGioco.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            MuoviGioco.ImageAlign = ContentAlignment.TopCenter;
+            MuoviGioco.Location = new Point(145, 397);
+            MuoviGioco.Name = "MuoviGioco";
+            MuoviGioco.Size = new Size(127, 50);
+            MuoviGioco.TabIndex = 4;
+            MuoviGioco.Text = "MuoviGioco";
+            MuoviGioco.UseVisualStyleBackColor = false;
+            MuoviGioco.Click += MuoviGioco_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Highlight;
             ClientSize = new Size(832, 459);
+            Controls.Add(MuoviGioco);
+            Controls.Add(IniziaGioco);
             Controls.Add(ChatDiAggiornamento);
             Controls.Add(MappaDiGioco);
             Controls.Add(label1);
@@ -109,5 +143,7 @@
         private Label label1;
         private TableLayoutPanel MappaDiGioco;
         private TableLayoutPanel ChatDiAggiornamento;
+        private Button IniziaGioco;
+        private Button MuoviGioco;
     }
 }

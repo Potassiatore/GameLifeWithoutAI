@@ -14,7 +14,8 @@ namespace GiocoDellaVitaFattoMeglio
     }
     public enum Oggetto
     {
-        Carota
+        Carota,
+        Fogliame
     }
     public class CFactory
     {
@@ -32,13 +33,14 @@ namespace GiocoDellaVitaFattoMeglio
     }
     public class CFactory2
     {
-        public CCarota Crea(Oggetto tipo)
+        public static CMangiabile Crea(Oggetto tipo)
         {
             return tipo switch
             {
                 Oggetto.Carota => new CCarota(),
+                Oggetto.Fogliame => new CFogliame(),
                 _ => throw new ArgumentException("Tipo non valido", nameof(tipo))
-            };
+            }; 
         }
     }
 }
