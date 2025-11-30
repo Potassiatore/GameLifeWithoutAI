@@ -21,8 +21,8 @@ namespace GiocoDellaVitaFattoMeglio
         // Costruttore base: posizione ed energia casuali
         protected CPersonaggio()
         {
-            Colonne = r.Next(0, 7);     // griglia 7x7 → indici 0..6
-            Righe = r.Next(0, 7);
+            Colonne = r.Next(0, 6);     // griglia 7x7 → indici 0..6
+            Righe = r.Next(0, 6);
             Energia = r.Next(1, 11);
         }
 
@@ -108,8 +108,8 @@ namespace GiocoDellaVitaFattoMeglio
 
         protected CMangiabile()
         {
-            Colonne = rnd.Next(0, 7);   // posizionamento casuale 0..6
-            Righe = rnd.Next(0, 7);
+            Colonne = rnd.Next(0, 6);   // posizionamento casuale 0..6
+            Righe = rnd.Next(0, 6);
         }
     }
 
@@ -145,27 +145,19 @@ namespace GiocoDellaVitaFattoMeglio
     {
         public static Image? CaricaImmagine(string nomeFile)
         {
-            // Prova questi percorsi (funziona sia in debug che dopo il build)
-            string[] percorsi =
-            {
-                nomeFile,
-                Path.Combine("images", nomeFile),
-                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, nomeFile),
-                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "images", nomeFile)
-            };
+            DirectoryInfo dirinf = new DirectoryInfo(Directory.GetCurrentDirectory());
+            string path = dirinf.Parent.Parent.FullName + @"\images\" + nomeFile.ToLower();
+            //MessageBox.Show(path);
 
-            foreach (var percorso in percorsi)
+            if (File.Exists(path))
             {
-                if (File.Exists(percorso))
+                try
                 {
-                    try
-                    {
-                        return Image.FromFile(percorso);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Errore caricamento {percorso}: {ex.Message}");
-                    }
+                    return Image.FromFile(path);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Errore caricamento {path}: {ex.Message}");
                 }
             }
 

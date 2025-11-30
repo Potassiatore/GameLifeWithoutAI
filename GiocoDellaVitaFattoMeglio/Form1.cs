@@ -11,7 +11,7 @@ namespace GiocoDellaVitaFattoMeglio
         public Form1()
         {
             InitializeComponent();
-            CreaMangiabili(6);
+            CreaMangiabili(1);
             CreaGriglia();
         }
         private void CreaGriglia()
@@ -57,8 +57,6 @@ namespace GiocoDellaVitaFattoMeglio
                 if (mangiabile.Immagine != null)
                     mappa[mangiabile.Righe, mangiabile.Colonne].Image = mangiabile.Immagine;
             }
-
-
         }
 
         public void GeneraMangiabili()
