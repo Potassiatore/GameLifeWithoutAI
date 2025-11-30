@@ -92,24 +92,52 @@ namespace GiocoDellaVitaFattoMeglio
     // ===========================================================
     // CAROTA (cibo)
     // ===========================================================
-    public class CCarota
+
+    // ===========================================================
+    // MANGIABILI (oggetti cibo)
+    // ===========================================================
+
+    public abstract class CMangiabile
     {
-        private static readonly Random rnd = new Random();
+        protected static readonly Random rnd = new Random();
 
-        public int PuntiEnergia { get; }
-        public Image? Immagine { get; }
-        public int Righe { get; }
-        public int Colonne { get; }
+        public int Colonne { get; protected set; }
+        public int Righe { get; protected set; }
+        public int PuntiEnergia { get; protected set; }
+        public Image? Immagine { get; protected set; }
 
+        protected CMangiabile()
+        {
+            Colonne = rnd.Next(0, 7);   // posizionamento casuale 0..6
+            Righe = rnd.Next(0, 7);
+        }
+    }
+
+    // ===========================================================
+    // CAROTA
+    // ===========================================================
+
+    public class CCarota : CMangiabile
+    {
         public CCarota()
         {
-            Colonne = rnd.Next(0, 7);
-            Righe = rnd.Next(0, 7);
-            PuntiEnergia = rnd.Next(1, 4); // 1, 2 o 3 punti energia
+            PuntiEnergia = rnd.Next(1, 4); // 1–3 energia
             Immagine = ImmagineHelper.CaricaImmagine("carota.png");
         }
     }
 
+    // ===========================================================
+    // FOGLIAME
+    // ===========================================================
+
+    public class CFogliame : CMangiabile
+    {
+        public CFogliame()
+        {
+            PuntiEnergia = rnd.Next(1, 3); // fogliame = 1–2 energia
+            Immagine = ImmagineHelper.CaricaImmagine("fogliame.png");
+        }
+    }
     // ===========================================================
     // HELPER PER CARICARE LE IMMAGINI IN MODO SICURO
     // ===========================================================
