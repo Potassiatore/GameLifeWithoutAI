@@ -7,8 +7,7 @@ namespace GiocoDellaVitaFattoMeglio
         List<CMangiabile> Mangiabili = new List<CMangiabile>();
         List<CPersonaggio> Personaggi = new List<CPersonaggio>();
         private PictureBox[,] mappa = new PictureBox[6, 6];
-        private static readonly Random rnd = new Random();
-        private int caroteCounter => Mangiabili.Count;
+
         public Form1()
         {
             InitializeComponent();
