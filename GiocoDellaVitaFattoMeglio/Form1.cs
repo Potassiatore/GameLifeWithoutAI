@@ -6,18 +6,21 @@ namespace GiocoDellaVitaFattoMeglio
     {
         List<CMangiabile> Mangiabili = new List<CMangiabile>();
         List<CPersonaggio> Personaggi = new List<CPersonaggio>();
-        private PictureBox[,] mappa = new PictureBox[6, 6];
+        private PictureBox[,] mappa = new PictureBox[10, 10];
+        private Random rnd = new Random();
+
 
         public Form1()
         {
+            CreaGiocatori();
             InitializeComponent();
-            CreaMangiabili(1);
+            CreaMangiabili(6);
             CreaGriglia();
         }
         private void CreaGriglia()
         {
-            int righe = 6;
-            int colonne = 6;
+            int righe = 10;
+            int colonne = 10;
             int cellSize = 60;
             int padding = 2;
 
@@ -44,24 +47,80 @@ namespace GiocoDellaVitaFattoMeglio
         }
 
 
-        public void PosizionaLeCose() 
+        public void PosizionaLeCose()
         {
-            foreach (var personaggio in Personaggi)
-            {
-                if (personaggio.Immagine != null)
-                    mappa[personaggio.Righe, personaggio.Colonne].Image = personaggio.Immagine;
-            }
+            int size = 10;
 
-            foreach (var mangiabile in Mangiabili)
+            // Unifica tutti gli elementi da posizionare
+            var tutti = new List<dynamic>();
+            tutti.AddRange(Personaggi);
+            tutti.AddRange(Mangiabili);
+
+            // Genera tutte le posizioni disponibili (100 celle)
+            List<(int r, int c)> posizioni = new List<(int, int)>();
+            for (int r = 0; r < size; r++)
+            for (int c = 0; c < size; c++)
+                posizioni.Add((r, c));
+
+            // Mescola una volta sola usando il Random di classe
+            posizioni = posizioni.OrderBy(x => rnd.Next()).ToList();
+
+            // Svuota la griglia
+            for (int r = 0; r < size; r++)
+            for (int c = 0; c < size; c++)
+                mappa[r, c].Image = null;
+
+            // Assegna una posizione casuale diversa a ciascun animale/mangiabile
+            for (int i = 0; i < tutti.Count && i < posizioni.Count; i++)
             {
-                if (mangiabile.Immagine != null)
-                    mappa[mangiabile.Righe, mangiabile.Colonne].Image = mangiabile.Immagine;
+                var elem = tutti[i];
+                var (r, c) = posizioni[i];
+
+                elem.Righe = r;
+                elem.Colonne = c;
+
+                if (elem.Immagine != null)
+                    mappa[r, c].Image = elem.Immagine;
             }
         }
 
+        private void MuoviCasuale()
+        {
+            int size = 10;
+
+            // Salva le posizioni dei mangiabili
+            var posMangiabili = new List<(int r, int c, Image img)>();
+            foreach (var m in Mangiabili)
+                if (m.Immagine != null)
+                    posMangiabili.Add((m.Righe, m.Colonne, m.Immagine));
+
+            // Svuota tutta la griglia
+            for (int r = 0; r < size; r++)
+            for (int c = 0; c < size; c++)
+                mappa[r, c].Image = null;
+
+            // Riposiziona i mangiabili
+            foreach (var m in posMangiabili)
+                mappa[m.r, m.c].Image = m.img;
+
+            // Muove i personaggi
+            foreach (var animale in Personaggi)
+            {
+                int nuovaRiga = rnd.Next(0, size);
+                int nuovaColonna = rnd.Next(0, size);
+
+                animale.Righe = nuovaRiga;
+                animale.Colonne = nuovaColonna;
+
+                if (animale.Immagine != null)
+                    mappa[nuovaRiga, nuovaColonna].Image = animale.Immagine;
+            }
+        }
+
+
+
         public void GeneraMangiabili()
         {
-            //Genera mangiabili se sono 0
         }
         public int CreaMangiabili(int quante)
         {
@@ -84,6 +143,7 @@ namespace GiocoDellaVitaFattoMeglio
 
             return quante;
         }
+
 
         public void CreaGiocatori()
         {
@@ -120,14 +180,14 @@ namespace GiocoDellaVitaFattoMeglio
 
         private void IniziaGioco_Click(object sender, EventArgs e)
         {
-            CreaGiocatori();
+            
             PosizionaLeCose();
             
         }
 
         private void MuoviGioco_Click(object sender, EventArgs e)
         {
-            
+            MuoviCasuale();
         }
     }
 }

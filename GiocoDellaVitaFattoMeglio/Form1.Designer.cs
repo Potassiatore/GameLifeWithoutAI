@@ -49,23 +49,31 @@
             // MappaDiGioco
             // 
             MappaDiGioco.CellBorderStyle = TableLayoutPanelCellBorderStyle.Inset;
-            MappaDiGioco.ColumnCount = 6;
-            MappaDiGioco.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.666666F));
-            MappaDiGioco.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.666666F));
-            MappaDiGioco.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.666666F));
-            MappaDiGioco.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.666666F));
-            MappaDiGioco.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.666666F));
-            MappaDiGioco.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16.666666F));
-            MappaDiGioco.Location = new Point(293, 41);
+            MappaDiGioco.ColumnCount = 10;
+            MappaDiGioco.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
+            MappaDiGioco.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
+            MappaDiGioco.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
+            MappaDiGioco.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
+            MappaDiGioco.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
+            MappaDiGioco.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
+            MappaDiGioco.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
+            MappaDiGioco.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
+            MappaDiGioco.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
+            MappaDiGioco.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
+            MappaDiGioco.Location = new Point(293, 12);
             MappaDiGioco.Name = "MappaDiGioco";
-            MappaDiGioco.RowCount = 6;
-            MappaDiGioco.RowStyles.Add(new RowStyle(SizeType.Percent, 16.6666679F));
-            MappaDiGioco.RowStyles.Add(new RowStyle(SizeType.Percent, 16.6666679F));
-            MappaDiGioco.RowStyles.Add(new RowStyle(SizeType.Percent, 16.6666679F));
-            MappaDiGioco.RowStyles.Add(new RowStyle(SizeType.Percent, 16.6666679F));
-            MappaDiGioco.RowStyles.Add(new RowStyle(SizeType.Percent, 16.6666679F));
-            MappaDiGioco.RowStyles.Add(new RowStyle(SizeType.Percent, 16.6666679F));
-            MappaDiGioco.Size = new Size(527, 341);
+            MappaDiGioco.RowCount = 10;
+            MappaDiGioco.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
+            MappaDiGioco.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
+            MappaDiGioco.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
+            MappaDiGioco.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
+            MappaDiGioco.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
+            MappaDiGioco.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
+            MappaDiGioco.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
+            MappaDiGioco.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
+            MappaDiGioco.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
+            MappaDiGioco.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
+            MappaDiGioco.Size = new Size(527, 435);
             MappaDiGioco.TabIndex = 1;
             MappaDiGioco.Paint += MappaDiGioco_Paint;
             // 
