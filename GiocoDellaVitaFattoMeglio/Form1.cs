@@ -6,7 +6,7 @@ namespace GiocoDellaVitaFattoMeglio
     {
         List<CCarota> Carote = new List<CCarota>();
         List<CPersonaggio> Personaggi = new List<CPersonaggio>();
-        private PictureBox[,] mappa = new PictureBox[6, 6];
+        private PictureBox[,] mappa = new PictureBox[7, 7];
 
         public Form1()
         {
