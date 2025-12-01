@@ -8,6 +8,7 @@ namespace GiocoDellaVitaFattoMeglio
 
     public abstract class CPersonaggio
     {
+        new ToolTip tooltip = new();
         public string Nome { get; set; } = string.Empty;
         public int Colonne { get; set; }
         public int Righe { get; set; }

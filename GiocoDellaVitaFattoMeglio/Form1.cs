@@ -82,38 +82,47 @@ namespace GiocoDellaVitaFattoMeglio
                 if (elem.Immagine != null)
                     mappa[r, c].Image = elem.Immagine;
             }
+            
         }
+
+        private void VerificaNuovePosizioni()
+        {
+            for (int i = 0; i < Personaggi.Count; i++)
+            {
+                for (int j = i + 1; j < Personaggi.Count; j++)
+                {
+                    // Stessa posizione
+                    if (Personaggi[i].Colonne == Personaggi[j].Colonne &&
+                        Personaggi[i].Righe == Personaggi[j].Righe)
+                    {
+                        // Leone + (Gazzella o Coniglio)
+                        bool coppiaLeonePreda =
+                            (Personaggi[i] is CLeone && (Personaggi[j] is CGazzella || Personaggi[j] is CConiglio)) ||
+                            (Personaggi[j] is CLeone && (Personaggi[i] is CGazzella || Personaggi[i] is CConiglio));
+
+                        bool coppiaAnimaleErbivoroCibo =
+                            ((Personaggi[i] is CGazzella || Personaggi[i] is CConiglio)&& (Personaggi[j] is CFogliame || Personaggi[j] is CCarota)) ||
+                            ((Personaggi[j] is CGazzella || Personaggi[j] is CConiglio)&& (Personaggi[i] is CFogliame || Personaggi[i] is CCarota));
+                        
+                        if (coppiaLeonePreda)
+                        {
+                            // Azione leone–preda
+                        }
+                        else if (coppiaAnimaleErbivoroCibo)
+                        {
+                            // Azione Erbivoro-Cibo
+                        }
+                    }
+                }
+            }
+        }
+
 
         private void MuoviCasuale()
         {
-            int size = 10;
-
-            // Salva le posizioni dei mangiabili
-            var posMangiabili = new List<(int r, int c, Image img)>();
-            foreach (var m in Mangiabili)
-                if (m.Immagine != null)
-                    posMangiabili.Add((m.Righe, m.Colonne, m.Immagine));
-
-            // Svuota tutta la griglia
-            for (int r = 0; r < size; r++)
-            for (int c = 0; c < size; c++)
-                mappa[r, c].Image = null;
-
-            // Riposiziona i mangiabili
-            foreach (var m in posMangiabili)
-                mappa[m.r, m.c].Image = m.img;
-
-            // Muove i personaggi
-            foreach (var animale in Personaggi)
+           foreach(var animale in Personaggi)
             {
-                int nuovaRiga = rnd.Next(0, size);
-                int nuovaColonna = rnd.Next(0, size);
-
-                animale.Righe = nuovaRiga;
-                animale.Colonne = nuovaColonna;
-
-                if (animale.Immagine != null)
-                    mappa[nuovaRiga, nuovaColonna].Image = animale.Immagine;
+                animale.PossoMuovermi();
             }
         }
 
