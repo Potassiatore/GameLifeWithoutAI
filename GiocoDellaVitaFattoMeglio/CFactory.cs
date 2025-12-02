@@ -10,7 +10,9 @@ namespace GiocoDellaVitaFattoMeglio
     {
         Leone,
         Gazzella,
-        Coniglio
+        Coniglio,
+        Carota,
+        Fogliame
     }
     public enum Oggetto
     {
@@ -26,21 +28,12 @@ namespace GiocoDellaVitaFattoMeglio
                 Personaggio.Leone => new CLeone(),
                 Personaggio.Gazzella => new CGazzella(),
                 Personaggio.Coniglio => new CConiglio(),
+                Personaggio.Fogliame => new CFogliame(),
+                Personaggio.Carota => new CCarota(),
                 _ => throw new ArgumentException("Tipo non valido", nameof(tipo))
             };
         }
 
     }
-    public class CFactory2
-    {
-        public static CMangiabile Crea(Oggetto tipo)
-        {
-            return tipo switch
-            {
-                Oggetto.Carota => new CCarota(),
-                Oggetto.Fogliame => new CFogliame(),
-                _ => throw new ArgumentException("Tipo non valido", nameof(tipo))
-            }; 
-        }
-    }
 }
+   
