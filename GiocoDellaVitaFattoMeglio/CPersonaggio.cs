@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 
 namespace GiocoDellaVitaFattoMeglio
@@ -8,7 +9,7 @@ namespace GiocoDellaVitaFattoMeglio
 
     public abstract class CPersonaggio
     {
-        new ToolTip tooltip = new();
+        public new ToolTip tooltip = new();
         public string Nome { get; set; } = string.Empty;
         public int Colonne { get; set; }
         public int Righe { get; set; }
@@ -16,7 +17,7 @@ namespace GiocoDellaVitaFattoMeglio
         public Image? Immagine { get; set; }
 
         public event Action<CPersonaggio, CPersonaggio>? OnMangiatoAnimale; 
-        public event Action<CPersonaggio, CMangiabile>? OnMangiatoCibo;       
+        public event Action<CPersonaggio, CPersonaggio>? OnMangiatoCibo;       
         public event Action<CPersonaggio>? OnMorte;
 
         public int TurniSenzaCaccia { get; set; } = 0; // per il leone
@@ -30,7 +31,7 @@ namespace GiocoDellaVitaFattoMeglio
         }
 
         
-        public void MangiaCibo(CMangiabile cibo)
+        public void MangiaCibo(CPersonaggio cibo)
         {
             OnMangiatoCibo?.Invoke(this, cibo);
         }
@@ -51,6 +52,7 @@ namespace GiocoDellaVitaFattoMeglio
         {
             Nome = $"Leone{Interlocked.Increment(ref conteggio)}";
             Immagine = ImmagineHelper.CaricaImmagine("leone.png");
+          
         }
 
         public override void PossoMuovermi()
@@ -100,39 +102,40 @@ namespace GiocoDellaVitaFattoMeglio
     }
 
  
-    public abstract class CMangiabile
-    {
-        protected Random rnd = new Random();
-
-        public int Colonne { get;  set; }
-        public int Righe { get;  set; }
-        public int PuntiEnergia { get;  set; }
-        public Image? Immagine { get;  set; }
-
-    }
 
     
 
-    public class CCarota : CMangiabile
+    public class CCarota : CPersonaggio
     {
-        
+
         public CCarota()
         {
-            PuntiEnergia = 3;
+            Energia = 3;
             Immagine = ImmagineHelper.CaricaImmagine("carota.png");
         }
+            public override void PossoMuovermi()
+        {
+            
+        }
+    
     }
 
    
 
-    public class CFogliame : CMangiabile
+    public class CFogliame : CPersonaggio
     {
         public CFogliame()
         {
-            PuntiEnergia = 5;
+            Energia = 5;
             Immagine = ImmagineHelper.CaricaImmagine("fogliame.png");
         }
+
+            public override void PossoMuovermi()
+        {
+           
+        }
     }
+    
     
     internal static class ImmagineHelper
     {

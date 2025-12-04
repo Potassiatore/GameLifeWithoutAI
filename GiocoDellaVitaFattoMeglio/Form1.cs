@@ -1,10 +1,11 @@
+using System.Runtime.CompilerServices;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace GiocoDellaVitaFattoMeglio
 {
     public partial class Form1 : Form
     {
-        List<CMangiabile> Mangiabili = new List<CMangiabile>();
+       
         List<CPersonaggio> Personaggi = new List<CPersonaggio>();
         private PictureBox[,] mappa = new PictureBox[10, 10];
         private Random rnd = new Random();
@@ -54,7 +55,7 @@ namespace GiocoDellaVitaFattoMeglio
             // Unifica tutti gli elementi da posizionare
             var tutti = new List<dynamic>();
             tutti.AddRange(Personaggi);
-            tutti.AddRange(Mangiabili);
+           
 
             // Genera tutte le posizioni disponibili (100 celle)
             List<(int r, int c)> posizioni = new List<(int, int)>();
@@ -85,15 +86,15 @@ namespace GiocoDellaVitaFattoMeglio
             
         }
 
-        private void VerificaNuovePosizioni()
+        private void VerificaNuovePosizioni(object sender, EventArgs e)
         {
             for (int i = 0; i < Personaggi.Count; i++)
             {
                 for (int j = i + 1; j < Personaggi.Count; j++)
                 {
                     // Stessa posizione
-                    if (Personaggi[i].Colonne == Personaggi[j].Colonne &&
-                        Personaggi[i].Righe == Personaggi[j].Righe)
+                    if ((Personaggi[i].Colonne == Personaggi[j].Colonne &&
+                        Personaggi[i].Righe == Personaggi[j].Righe))
                     {
                         // Leone + (Gazzella o Coniglio)
                         bool coppiaLeonePreda =
@@ -143,12 +144,12 @@ namespace GiocoDellaVitaFattoMeglio
             for (int i = 0; i < quante; i++)
             {
                 // creo una nuova carota tramite factory
-                CMangiabile nuova = CFactory2.Crea(Oggetto.Carota);
-                CMangiabile nuova1 = CFactory2.Crea(Oggetto.Fogliame);
+                CPersonaggio nuova = CFactory.Crea(Personaggio.Carota);
+                CPersonaggio nuova1 = CFactory.Crea(Personaggio.Fogliame);
 
                 // aggiungo alla lista
-                Mangiabili.Add(nuova);
-                Mangiabili.Add(nuova1);
+                Personaggi.Add(nuova);
+                Personaggi.Add(nuova1);
             }
 
             return quante;
