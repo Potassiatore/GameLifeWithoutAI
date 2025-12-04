@@ -124,6 +124,7 @@ namespace GiocoDellaVitaFattoMeglio
             {
                 animale.PossoMuovermi();
             }
+            VerificaNuovePosizioni();
         }
 
 

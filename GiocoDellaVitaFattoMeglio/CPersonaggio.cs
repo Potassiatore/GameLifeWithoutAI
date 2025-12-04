@@ -56,7 +56,10 @@ namespace GiocoDellaVitaFattoMeglio
         public override void PossoMuovermi()
         {
             if (Energia < 5)
-                Console.WriteLine($"{Nome}: Energia troppo bassa ({Energia}) – non mi muovo!");
+            {
+
+            }
+                
         }
     }
 
