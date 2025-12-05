@@ -1,126 +1,88 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading;
+using GiocoDellaVitaFattoMeglio;
 
 namespace GiocoDellaVitaFattoMeglio
 {
-
     public abstract class CPersonaggio
     {
-        public new ToolTip tooltip = new();
         public string Nome { get; set; } = string.Empty;
         public int Colonne { get; set; }
         public int Righe { get; set; }
         public int Energia { get; set; }
+        public bool State { get; set; }
         public Image? Immagine { get; set; }
 
-        public event Action<CPersonaggio, CPersonaggio>? OnMangiatoAnimale; 
-        public event Action<CPersonaggio, CPersonaggio>? OnMangiatoCibo;       
+        public event Action<CPersonaggio, CPersonaggio>? OnMangiatoAnimale;
+        public event Action<CPersonaggio, CPersonaggio>? OnMangiatoCibo;
         public event Action<CPersonaggio>? OnMorte;
 
-        public int TurniSenzaCaccia { get; set; } = 0; // per il leone
+        public int TurniSenzaCaccia { get; set; } = 0;
 
-        public abstract void PossoMuovermi();
+        public abstract int EnergiaMinimaPerMuoversi { get; }
 
-     
-        public void MangiaAnimale(CPersonaggio preda)
+        public void PossoMuovermi()
         {
-            OnMangiatoAnimale?.Invoke(this, preda);
+            State = Energia >= EnergiaMinimaPerMuoversi;
         }
 
-        
-        public void MangiaCibo(CPersonaggio cibo)
-        {
-            OnMangiatoCibo?.Invoke(this, cibo);
-        }
-
-        public void Muori()
-        {
-            OnMorte?.Invoke(this);
-        }
+        public void MangiaAnimale(CPersonaggio preda) => OnMangiatoAnimale?.Invoke(this, preda);
+        public void MangiaCibo(CPersonaggio cibo) => OnMangiatoCibo?.Invoke(this, cibo);
+        public void Muori() => OnMorte?.Invoke(this);
     }
-
-
 
     public class CLeone : CPersonaggio
     {
         private static int conteggio = 0;
-
         public CLeone()
         {
             Nome = $"Leone{Interlocked.Increment(ref conteggio)}";
             Immagine = ImmagineHelper.CaricaImmagine("leone.png");
-          
+            Energia = 10;
         }
-
-        public override void PossoMuovermi()
-        {
-            if (Energia < 5)
-            {
-
-            }
-                
-        }
+        public override int EnergiaMinimaPerMuoversi => 5;
     }
-
 
     public class CGazzella : CPersonaggio
     {
         private static int conteggio = 0;
-
         public CGazzella()
         {
             Nome = $"Gazzella{Interlocked.Increment(ref conteggio)}";
             Immagine = ImmagineHelper.CaricaImmagine("gazzella.png");
+            Energia = 6;
         }
-
-        public override void PossoMuovermi()
-        {
-            if (Energia < 4)
-                Console.WriteLine($"{Nome}: Energia troppo bassa ({Energia}) – non mi muovo!");
-        }
+        public override int EnergiaMinimaPerMuoversi => 3;
     }
 
-  
     public class CConiglio : CPersonaggio
     {
         private static int conteggio = 0;
-
         public CConiglio()
         {
             Nome = $"Coniglio{Interlocked.Increment(ref conteggio)}";
             Immagine = ImmagineHelper.CaricaImmagine("coniglio.png");
+            Energia = 4;
         }
-
-        public override void PossoMuovermi()
-        {
-            if (Energia < 2)
-                Console.WriteLine($"{Nome}: Energia troppo bassa ({Energia}) – non mi muovo!");
-        }
+        public override int EnergiaMinimaPerMuoversi => 2;
     }
-
- 
-
-    
 
     public class CCarota : CPersonaggio
     {
-
         public CCarota()
         {
             Energia = 3;
             Immagine = ImmagineHelper.CaricaImmagine("carota.png");
+            State = false;
         }
-            public override void PossoMuovermi()
-        {
-            
-        }
-    
-    }
 
-   
+        public override int EnergiaMinimaPerMuoversi => 3;
+        }
+
+       
+    }
 
     public class CFogliame : CPersonaggio
     {
@@ -128,23 +90,19 @@ namespace GiocoDellaVitaFattoMeglio
         {
             Energia = 5;
             Immagine = ImmagineHelper.CaricaImmagine("fogliame.png");
+            State = false;
         }
 
-            public override void PossoMuovermi()
-        {
-           
+        public override int EnergiaMinimaPerMuoversi => 3;
         }
-    }
+
+       
     
-    
+
     internal static class ImmagineHelper
-    {
-        public static Image? CaricaImmagine(string nomeFile)
-        {
-            DirectoryInfo dirinf = new DirectoryInfo(Directory.GetCurrentDirectory());
+    { public static Image? CaricaImmagine(string nomeFile) 
+        { DirectoryInfo dirinf = new DirectoryInfo(Directory.GetCurrentDirectory()); 
             string path = dirinf.Parent.Parent.FullName + @"\images\" + nomeFile.ToLower();
-          
-
             if (File.Exists(path))
             {
                 try
@@ -153,12 +111,11 @@ namespace GiocoDellaVitaFattoMeglio
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Errore caricamento {path}: {ex.Message}");
-                }
-            }
+                    Console.WriteLine($"Errore caricamento {path}: {ex.Message}"); 
 
-            Console.WriteLine($"Immagine NON trovata: {nomeFile}");
-            return null; 
+                }
+            } Console.WriteLine($"Immagine NON trovata: {nomeFile}"); 
+            
+            return null;
         }
     }
-}
