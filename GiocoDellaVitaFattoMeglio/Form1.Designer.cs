@@ -33,6 +33,7 @@
             ChatDiAggiornamento = new TableLayoutPanel();
             IniziaGioco = new Button();
             MuoviGioco = new Button();
+            label2 = new Label();
             SuspendLayout();
             // 
             // label1
@@ -60,7 +61,7 @@
             MappaDiGioco.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
             MappaDiGioco.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
             MappaDiGioco.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
-            MappaDiGioco.Location = new Point(293, 12);
+            MappaDiGioco.Location = new Point(290, 41);
             MappaDiGioco.Name = "MappaDiGioco";
             MappaDiGioco.RowCount = 10;
             MappaDiGioco.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
@@ -73,12 +74,13 @@
             MappaDiGioco.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
             MappaDiGioco.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
             MappaDiGioco.RowStyles.Add(new RowStyle(SizeType.Percent, 10F));
-            MappaDiGioco.Size = new Size(527, 435);
+            MappaDiGioco.Size = new Size(530, 406);
             MappaDiGioco.TabIndex = 1;
             MappaDiGioco.Paint += MappaDiGioco_Paint;
             // 
             // ChatDiAggiornamento
             // 
+            ChatDiAggiornamento.Anchor = AnchorStyles.None;
             ChatDiAggiornamento.CellBorderStyle = TableLayoutPanelCellBorderStyle.Inset;
             ChatDiAggiornamento.ColumnCount = 1;
             ChatDiAggiornamento.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
@@ -139,12 +141,24 @@
             MuoviGioco.UseVisualStyleBackColor = false;
             MuoviGioco.Click += MuoviGioco_Click;
             // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point);
+            label2.Location = new Point(290, 8);
+            label2.Name = "label2";
+            label2.Size = new Size(162, 30);
+            label2.TabIndex = 5;
+            label2.Text = "Animali in vita:";
+            label2.Click += label2_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Highlight;
             ClientSize = new Size(832, 459);
+            Controls.Add(label2);
             Controls.Add(MuoviGioco);
             Controls.Add(IniziaGioco);
             Controls.Add(ChatDiAggiornamento);
@@ -164,5 +178,6 @@
         private TableLayoutPanel ChatDiAggiornamento;
         private Button IniziaGioco;
         private Button MuoviGioco;
+        private Label label2;
     }
 }

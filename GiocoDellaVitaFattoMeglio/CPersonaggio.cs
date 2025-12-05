@@ -88,7 +88,7 @@ namespace GiocoDellaVitaFattoMeglio
     {
         public CFogliame()
         {
-            Energia = 5;
+            Energia = 2;
             Immagine = ImmagineHelper.CaricaImmagine("fogliame.png");
             State = false;
         }

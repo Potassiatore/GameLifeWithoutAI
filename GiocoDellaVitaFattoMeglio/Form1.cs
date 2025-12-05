@@ -8,6 +8,8 @@ namespace GiocoDellaVitaFattoMeglio
         List<CPersonaggio> Personaggi = new List<CPersonaggio>();
         private PictureBox[,] mappa = new PictureBox[10, 10];
         private Random rnd = new Random();
+        private ToolTip tooltipEnergia = new ToolTip();
+
         private HashSet<CLeone> leoniCheHannoMangiatoQuestoTurno = new();
         private int turniDaUltimoMangiabile = 0;
         private const int TURNI_PER_NUOVO_CIBO = 2;
@@ -48,7 +50,7 @@ namespace GiocoDellaVitaFattoMeglio
             if (Personaggi.Contains(cibo))
                 Personaggi.Remove(cibo);
 
-            erbivoro.Energia += 2;
+            erbivoro.Energia += cibo.Energia;
 
             // Log dell'azione
             Log($"{erbivoro.Nome} ha mangiato {cibo.Nome}!");
@@ -134,7 +136,7 @@ namespace GiocoDellaVitaFattoMeglio
         }
 
 
-        // Disabilita il pulsante di movimento quando il gioco finisce
+
         private void DisabilitaMovimento()
         {
             MuoviGioco.Enabled = false;
@@ -149,7 +151,6 @@ namespace GiocoDellaVitaFattoMeglio
             if (Personaggi.Contains(preda))
                 Personaggi.Remove(preda);
 
-            // Log dell'azione
             Log($"{predatore.Nome} ha mangiato {preda.Nome}!");
 
             if (predatore is CLeone leone)
@@ -182,6 +183,37 @@ namespace GiocoDellaVitaFattoMeglio
                 p.OnMorte += HandlerMorte;
             }
         }
+        private void PictureBox_MouseHover(object? sender, EventArgs e)
+        {
+            if (sender is PictureBox pb)
+            {
+                // Trova la posizione del PictureBox nella mappa
+                for (int r = 0; r < mappa.GetLength(0); r++)
+                {
+                    for (int c = 0; c < mappa.GetLength(1); c++)
+                    {
+                        if (mappa[r, c] == pb)
+                        {
+                            // Trova il personaggio in quella cella
+                            var personaggio = Personaggi
+                                .FirstOrDefault(p => p.Righe == r && p.Colonne == c);
+
+                            if (personaggio != null)
+                            {
+                                tooltipEnergia.SetToolTip(pb,
+                                    $"{personaggio.Nome}\nEnergia: {personaggio.Energia}");
+                            }
+                            else
+                            {
+                                tooltipEnergia.SetToolTip(pb, "Vuoto");
+                            }
+
+                            return;
+                        }
+                    }
+                }
+            }
+        }
 
         private void CreaGriglia()
         {
@@ -200,6 +232,8 @@ namespace GiocoDellaVitaFattoMeglio
                     pb.BorderStyle = BorderStyle.FixedSingle;
                     pb.SizeMode = PictureBoxSizeMode.StretchImage;
                     pb.Location = new Point(c * (cellSize + padding), r * (cellSize + padding));
+                    pb.MouseHover += PictureBox_MouseHover;
+
                     mappa[r, c] = pb;
                     MappaDiGioco.Controls.Add(pb);
                 }
@@ -260,7 +294,7 @@ namespace GiocoDellaVitaFattoMeglio
 
         private void GestisciFameLeoni()
         {
-            const int MAX_TURNI_SENZA_CACCIA = 10;
+            const int MAX_TURNI_SENZA_CACCIA = 50;
             var leoni = Personaggi.OfType<CLeone>().ToList();
             foreach (var leone in leoni)
             {
@@ -280,7 +314,7 @@ namespace GiocoDellaVitaFattoMeglio
 
             foreach (var p in Personaggi.ToList())
             {
-                p.Energia += 1; // energia passiva per turno
+                p.Energia += 1;
                 p.PossoMuovermi();
                 if (!p.State) continue;
 
@@ -294,7 +328,7 @@ namespace GiocoDellaVitaFattoMeglio
 
             }
 
-            VerificaNuovePosizioni(); // gestisce mangiate
+            VerificaNuovePosizioni();
             GestisciFameLeoni();
 
             foreach (var morto in daRimuovere)
@@ -338,7 +372,7 @@ namespace GiocoDellaVitaFattoMeglio
 
             return quante;
         }
-        private const int MaxRighe = 8; // numero di righe nella chat
+        private const int MaxRighe = 8;
 
         private void InizializzaChat()
         {
@@ -358,7 +392,7 @@ namespace GiocoDellaVitaFattoMeglio
                     TextAlign = ContentAlignment.MiddleLeft,
                     Dock = DockStyle.Fill,
                     ForeColor = Color.Black,
-                    BackColor = Color.Transparent // sfondo trasparente
+                    BackColor = Color.Transparent
                 };
 
                 ChatDiAggiornamento.Controls.Add(lbl, 0, r);
@@ -368,7 +402,7 @@ namespace GiocoDellaVitaFattoMeglio
 
         private void Log(string messaggio)
         {
-            // Sposta il contenuto verso l’alto
+
             for (int r = 0; r < MaxRighe - 1; r++)
             {
                 if (ChatDiAggiornamento.GetControlFromPosition(0, r) is Label lbl &&
@@ -378,26 +412,27 @@ namespace GiocoDellaVitaFattoMeglio
                 }
             }
 
-            // Inserisci il nuovo messaggio nell’ultima label
+
             if (ChatDiAggiornamento.GetControlFromPosition(0, MaxRighe - 1) is Label ultima)
             {
                 ultima.Text = messaggio;
             }
         }
-
-
-
-
-
-
-
-
         public void CreaGiocatori()
         {
             Personaggi.Add(CFactory.Crea(Personaggio.Leone));
             Personaggi.Add(CFactory.Crea(Personaggio.Leone));
             Personaggi.Add(CFactory.Crea(Personaggio.Leone));
             Personaggi.Add(CFactory.Crea(Personaggio.Leone));
+            Personaggi.Add(CFactory.Crea(Personaggio.Leone));
+            Personaggi.Add(CFactory.Crea(Personaggio.Leone));
+            Personaggi.Add(CFactory.Crea(Personaggio.Leone));
+            Personaggi.Add(CFactory.Crea(Personaggio.Leone));
+            Personaggi.Add(CFactory.Crea(Personaggio.Gazzella));
+            Personaggi.Add(CFactory.Crea(Personaggio.Gazzella));
+            Personaggi.Add(CFactory.Crea(Personaggio.Coniglio));
+            Personaggi.Add(CFactory.Crea(Personaggio.Coniglio));
+            Personaggi.Add(CFactory.Crea(Personaggio.Coniglio));
             Personaggi.Add(CFactory.Crea(Personaggio.Gazzella));
             Personaggi.Add(CFactory.Crea(Personaggio.Gazzella));
             Personaggi.Add(CFactory.Crea(Personaggio.Coniglio));
@@ -407,12 +442,12 @@ namespace GiocoDellaVitaFattoMeglio
 
         private void IniziaGioco_Click(object sender, EventArgs e)
         {
-            Log("Partita iniziata!");
-            // Pulisci personaggi e mappa
+            MessageBox.Show("Partita iniziata!");
+
             Personaggi.Clear();
             for (int r = 0; r < mappa.GetLength(0); r++)
-            for (int c = 0; c < mappa.GetLength(1); c++)
-                mappa[r, c].Image = null;
+                for (int c = 0; c < mappa.GetLength(1); c++)
+                    mappa[r, c].Image = null;
 
             // Pulisci la chat
             foreach (Control ctrl in ChatDiAggiornamento.Controls)
@@ -421,7 +456,7 @@ namespace GiocoDellaVitaFattoMeglio
                     lbl.Text = string.Empty;
             }
 
-            // Crea nuovi elementi di gioco
+
             CreaGiocatori();
             CreaMangiabili(6);
             inizializzaEventiPersonaggi();
@@ -429,20 +464,35 @@ namespace GiocoDellaVitaFattoMeglio
             MuoviGioco.Enabled = true;
 
         }
-
+       
         private void MuoviGioco_Click(object sender, EventArgs e)
         {
+
             MovimentoCasuale();
             if (Personaggi.Count == 0)
             {
                 MessageBox.Show("Inizia prima una partita");
-                
+
             }
-            
+            AggiornaContatori();
+
+
+        }
+        private void AggiornaContatori()
+        {
+            int leoni = Personaggi.OfType<CLeone>().Count();
+            int erbivori = Personaggi.OfType<CGazzella>().Count() + Personaggi.OfType<CConiglio>().Count();
+
+            label2.Text = $"Leoni: {leoni} | Erbivori: {erbivori}";
         }
         private void label1_Click(object sender, EventArgs e) { }
         private void MappaDiGioco_Paint(object sender, PaintEventArgs e) { }
         private void ChatDiAggiornamento_Paint(object sender, PaintEventArgs e) { }
         private void Form1_Load(object sender, EventArgs e) { }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
