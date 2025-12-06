@@ -11,6 +11,7 @@ namespace GiocoDellaVitaFattoMeglio
         private HashSet<CLeone> leoniCheHannoMangiatoQuestoTurno = new();
         private int turniDaUltimoMangiabile = 0;
         private const int TURNI_PER_NUOVO_CIBO = 2;
+        private ToolTip tooltipEnergia = new ToolTip();
 
 
         public Form1()
@@ -201,7 +202,36 @@ namespace GiocoDellaVitaFattoMeglio
                     pb.SizeMode = PictureBoxSizeMode.StretchImage;
                     pb.Location = new Point(c * (cellSize + padding), r * (cellSize + padding));
                     mappa[r, c] = pb;
+                    pb.MouseHover += PictureBox_MouseHover;
                     MappaDiGioco.Controls.Add(pb);
+                }
+            }
+        }
+        private void PictureBox_MouseHover(object sender, EventArgs e)
+        {
+            PictureBox pb = sender as PictureBox;
+            if (pb == null) return;
+
+            // Recupera posizione nella griglia
+            for (int r = 0; r < mappa.GetLength(0); r++)
+            {
+                for (int c = 0; c < mappa.GetLength(1); c++)
+                {
+                    if (mappa[r, c] == pb)
+                    {
+                        // Cerca se c’è un personaggio in questa cella
+                        var p = Personaggi.FirstOrDefault(x => x.Righe == r && x.Colonne == c);
+                        if (p != null)
+                        {
+                            string text = $"{p.Nome}\nEnergia: {p.Energia}";
+                            tooltipEnergia.SetToolTip(pb, text);
+                        }
+                        else
+                        {
+                            tooltipEnergia.SetToolTip(pb, "");
+                        }
+                        return;
+                    }
                 }
             }
         }
@@ -280,7 +310,7 @@ namespace GiocoDellaVitaFattoMeglio
 
             foreach (var p in Personaggi.ToList())
             {
-                p.Energia += 1; // energia passiva per turno
+                p.Energia += 1; 
                 p.PossoMuovermi();
                 if (!p.State) continue;
 
@@ -294,7 +324,7 @@ namespace GiocoDellaVitaFattoMeglio
 
             }
 
-            VerificaNuovePosizioni(); // gestisce mangiate
+            VerificaNuovePosizioni(); 
             GestisciFameLeoni();
 
             foreach (var morto in daRimuovere)
@@ -338,7 +368,7 @@ namespace GiocoDellaVitaFattoMeglio
 
             return quante;
         }
-        private const int MaxRighe = 8; // numero di righe nella chat
+        private const int MaxRighe = 8; 
 
         private void InizializzaChat()
         {
@@ -358,7 +388,7 @@ namespace GiocoDellaVitaFattoMeglio
                     TextAlign = ContentAlignment.MiddleLeft,
                     Dock = DockStyle.Fill,
                     ForeColor = Color.Black,
-                    BackColor = Color.Transparent // sfondo trasparente
+                    BackColor = Color.Transparent 
                 };
 
                 ChatDiAggiornamento.Controls.Add(lbl, 0, r);
@@ -368,7 +398,7 @@ namespace GiocoDellaVitaFattoMeglio
 
         private void Log(string messaggio)
         {
-            // Sposta il contenuto verso l’alto
+           
             for (int r = 0; r < MaxRighe - 1; r++)
             {
                 if (ChatDiAggiornamento.GetControlFromPosition(0, r) is Label lbl &&
@@ -378,19 +408,11 @@ namespace GiocoDellaVitaFattoMeglio
                 }
             }
 
-            // Inserisci il nuovo messaggio nell’ultima label
             if (ChatDiAggiornamento.GetControlFromPosition(0, MaxRighe - 1) is Label ultima)
             {
                 ultima.Text = messaggio;
             }
         }
-
-
-
-
-
-
-
 
         public void CreaGiocatori()
         {
@@ -408,20 +430,17 @@ namespace GiocoDellaVitaFattoMeglio
         private void IniziaGioco_Click(object sender, EventArgs e)
         {
             Log("Partita iniziata!");
-            // Pulisci personaggi e mappa
             Personaggi.Clear();
             for (int r = 0; r < mappa.GetLength(0); r++)
-            for (int c = 0; c < mappa.GetLength(1); c++)
-                mappa[r, c].Image = null;
+                for (int c = 0; c < mappa.GetLength(1); c++)
+                    mappa[r, c].Image = null;
 
-            // Pulisci la chat
             foreach (Control ctrl in ChatDiAggiornamento.Controls)
             {
                 if (ctrl is Label lbl)
                     lbl.Text = string.Empty;
             }
 
-            // Crea nuovi elementi di gioco
             CreaGiocatori();
             CreaMangiabili(6);
             inizializzaEventiPersonaggi();
